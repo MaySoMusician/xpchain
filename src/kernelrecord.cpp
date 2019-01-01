@@ -84,7 +84,18 @@ double KernelRecord::getProbToMintWithinNMinutes(double difficulty, int minutes)
 {
     if(difficulty != prevDifficulty || minutes != prevMinutes)
     {
-        double prob = 1;
+        double prob = 0;
+        for(int numTrials = 0; numTrials <= minutes * 60; numTrials++)
+        {
+            double probCurrentTrial = 1;
+            for(int i = 0; i < numTrials; i++)
+            {
+                probCurrentTrial *= (1 - getProbToMintStake(difficulty, i));
+            }
+            probCurrentTrial *= getProbToMintStake(difficulty, numTrials);
+            prob += probCurrentTrial;
+        }
+        /*double prob = 1;
         double p;
         int d = minutes / (60 * 24); // Number of full days
         int m = minutes % (60 * 24); // Number of minutes in the last day
@@ -101,9 +112,9 @@ double KernelRecord::getProbToMintWithinNMinutes(double difficulty, int minutes)
         // Probability for the m minutes of the last day
         timeOffset = d * 86400;
         p = pow(1 - getProbToMintStake(difficulty, timeOffset), 60 * m);
-        prob *= p;
+        prob *= p;*/
 
-        prob = 1 - prob;
+        // prob = 1 - prob;
         prevProbability = prob;
         prevDifficulty = difficulty;
         prevMinutes = minutes;
