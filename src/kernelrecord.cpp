@@ -91,7 +91,6 @@ double KernelRecord::getProbToMintWithinNMinutes(double difficulty, int minutes)
         {
             // Calculate probability of not minting a block until [i-1]th trial and minting on [i]th trial
             double probNotToMintOnCurCase = i > 0 ? probNotToMintOnPrevCase * (1 - getProbToMintStake(difficulty, i - 1)) : 1;
-            // if(i > 0) probNotToMintOnCurCase = probNotToMintOnPrevCase * (1 - getProbToMintStake(difficulty, i - 1));
 
             double probToMintOnCurCase = probNotToMintOnCurCase * getProbToMintStake(difficulty, i);
             prob += probToMintOnCurCase;
